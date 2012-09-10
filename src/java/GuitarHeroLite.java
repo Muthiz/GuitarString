@@ -10,12 +10,14 @@ public class GuitarHeroLite {
           while (true) {
 
               // check if the user has typed a key; if so, process it   
+
               if (StdDraw.hasNextKeyTyped()) {
                   char key = StdDraw.nextKeyTyped();
                   if      (key == 'a') { stringA.pluck(); }
                   else if (key == 'c') { stringC.pluck(); }
               }
 
+		System.out.println("Plucking Nuts");
               // compute the superposition of samples
               double sample = stringA.sample() + stringC.sample();
   
