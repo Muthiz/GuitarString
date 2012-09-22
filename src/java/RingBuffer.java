@@ -1,15 +1,8 @@
 public class RingBuffer{
 //-----------------------------------------------------------------------------------------
-
-	/**
-		Make it an actual ringbuffer.
-		First does not loop
-		Last does not loop
-	*/
-
-
-	private int Max_cap = 0, first = 0, last = 0;
-	private double[] Buffer;
+	public int Max_cap = 0, first = 0, last = 0;//CHANGE BACK TO PRIVATE
+	public boolean empty = true;
+	public double[] Buffer;
 
 	RingBuffer(int capacity){  // create an empty ring buffer, with given max capacity
 		try{
@@ -25,13 +18,14 @@ public class RingBuffer{
 	}
 
     	int size(){                    // return number of items currently in the buffer
-		if(first>last)
-			return (Max_cap-first+last);
+
+		//System.out.println(first+"		" + last + "		");
+		if(first+1>last) return (Max_cap-first+last);
 		return (last - first);
 	}
 
 	boolean isEmpty(){                 // is the buffer empty (size equals zero)?
-		return this.size() == 0;
+		return empty;
 	}
 
 	boolean isFull(){                  // is the buffer full  (size equals capacity)?
@@ -41,11 +35,14 @@ public class RingBuffer{
 	void enqueue(double x){         // add item x to the end
 		try{
 			if(!this.isFull()){
-				System.out.println("Size=" +size()+" Enqueued "+ x +" last= "+last);
+				//System.out.println("Size= " +size()+" first= "+ first +" last= "+last);
+				if(last==Max_cap) last = 0;
 				Buffer[last] = x;
+		//		System.out.println(isFull());
+				empty=false;
 				last++;
-			}
-			else throw new Exception("The Queue is full, the value could not be stored");
+		}
+			else throw new Exception("The Queue is full, the value, " + x  + " could not be stored at " + last);
 		}
 		catch(Exception exc){
 			System.out.println(exc.getMessage());
@@ -53,14 +50,16 @@ public class RingBuffer{
 	}
 
 	double dequeue(){                 // delete and return item from the front
-		System.out.println("DeQueue!!!");
 		try{	
-			if(!this.isEmpty()){
-				
-				return Buffer[first];
-				
-			}
-			throw new Exception("The Queue is empty, a value could not be dequeued");
+				double temp = Buffer[first];	
+//				System.out.println("	First "+ Buffer[first]);
+		//	if(!this.isEmpty()){
+			first++;
+				if(first == Max_cap) first = 0;
+				if(first==last)
+				return temp;
+		//	}
+		//	else throw new Exception("The Queue is empty, a value could not be dequeued");
 		}
 		catch(Exception exc){
 			System.out.println(exc.getMessage());
